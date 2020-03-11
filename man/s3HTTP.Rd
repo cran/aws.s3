@@ -7,9 +7,10 @@
 s3HTTP(verb = "GET", bucket = "", path = "", query = NULL,
   headers = list(), request_body = "", write_disk = NULL,
   accelerate = FALSE, dualstack = FALSE, parse_response = TRUE,
-  check_region = TRUE, url_style = c("path", "virtual"),
+  check_region = FALSE, url_style = c("path", "virtual"),
   base_url = Sys.getenv("AWS_S3_ENDPOINT", "s3.amazonaws.com"),
-  verbose = getOption("verbose", FALSE), region = NULL, key = NULL,
+  verbose = getOption("verbose", FALSE),
+  show_progress = getOption("verbose", FALSE), region = NULL, key = NULL,
   secret = NULL, session_token = NULL, use_https = TRUE, ...)
 }
 \arguments{
@@ -33,13 +34,15 @@ s3HTTP(verb = "GET", bucket = "", path = "", query = NULL,
 
 \item{parse_response}{A logical indicating whether to return the response as is, or parse and return as a list. Default is \code{TRUE}.}
 
-\item{check_region}{A logical indicating whether to check the value of \code{region} against the apparent bucket region. This is useful for avoiding (often confusing) out-of-region errors. Default is \code{TRUE}.}
+\item{check_region}{A logical indicating whether to check the value of \code{region} against the apparent bucket region. This is useful for avoiding (often confusing) out-of-region errors. Default is \code{FALSE}.}
 
 \item{url_style}{A character string specifying either \dQuote{path} (the default), or \dQuote{virtual}-style S3 URLs.}
 
 \item{base_url}{A character string specifying the base URL for the request. There is no need to set this, as it is provided only to generalize the package to (potentially) support S3-compatible storage on non-AWS servers. The easiest way to use S3-compatible storage is to set the \env{AWS_S3_ENDPOINT} environment variable.}
 
 \item{verbose}{A logical indicating whether to be verbose. Default is given by \code{options("verbose")}.}
+
+\item{show_progress}{A logical indicating whether to show a progress bar for downloads and uploads. Default is given by \code{options("verbose")}.}
 
 \item{region}{A character string containing the AWS region. Ignored if region can be inferred from \code{bucket}. If missing, defaults to \dQuote{us-east-1}.}
 

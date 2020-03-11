@@ -18,7 +18,6 @@ delete_object <- function(object, bucket, quiet = TRUE, ...) {
     if (missing(bucket)) {
         bucket <- get_bucketname(object)
     }
-    regionname <- get_region(bucket)
     object <- get_objectkey(object)
     if (length(object) == 1) {
         r <- s3HTTP(verb = "DELETE", 
@@ -27,7 +26,7 @@ delete_object <- function(object, bucket, quiet = TRUE, ...) {
                     ...)
         return(TRUE)
     } else {
-        xml <- read_xml(paste0('<?xml version="1.0" encoding="UTF-8"?><Delete><Quiet>', tolower(quiet),'</Quiet></Delete>'))
+        xml <- xml2::read_xml(paste0('<?xml version="1.0" encoding="UTF-8"?><Delete><Quiet>', tolower(quiet),'</Quiet></Delete>'))
         for (i in seq_along(object)) {
             xml2::xml_add_child(xml, xml2::read_xml(paste0("<Object><Key>", get_objectkey(object[[i]]), "</Key></Object>")))
         }
