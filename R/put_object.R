@@ -145,7 +145,7 @@ function(
         # loop over parts
         for (i in seq_len(nparts)) {
             if (isTRUE(verbose) | isTRUE(show_progress)) {
-                message(sprintf("Uploading part %d of %d-part upload", i, nparts))
+                message("Uploading part ", i, " of ", nparts, "-part upload")
             }
 
             data <- readBin(file, raw(), n=partsize)
@@ -153,7 +153,7 @@ function(
             r <- s3HTTP(verb = "PUT", 
                         bucket = bucket,
                         path = paste0('/', object),
-                        headers = list(`Content-Length` = length(data)),
+                        headers = list(`Content-Length` = formatSize(length(data))),
                         query = list(partNumber = i, uploadId = id),
                         request_body = data,
                         verbose = verbose,
@@ -177,11 +177,11 @@ function(
     } else {
         if (!"Content-Length" %in% names(headers)) {
             headers <- c(headers, list(
-                         `Content-Length` = calculate_data_size(file)
+                         `Content-Length` = formatSize(calculate_data_size(file))
                          ))
         }
-        if (headers[["Content-Length"]] > 1e7) {
-            message(sprintf("File size is %d. Consider setting 'multipart = TRUE'.", headers[["Content-Length"]]))
+        if (as.numeric(headers[["Content-Length"]]) > 1e7) {
+            message("File size is ", headers[["Content-Length"]], ". Consider setting 'multipart = TRUE'.")
         }
         r <- s3HTTP(verb = "PUT", 
                     bucket = bucket,
@@ -214,7 +214,7 @@ post_object <- function(file, object, bucket, headers = list(), ...) {
         object <- get_objectkey(object)
     }
     if (!"Content-Length" %in% names(headers)) {
-        headers <- c(headers, list(`Content-Length` = calculate_data_size(file)))
+        headers <- c(headers, list(`Content-Length` = formatSize(calculate_data_size(file))))
     }
     r <- s3HTTP(verb = "POST", 
                 bucket = bucket,
@@ -285,4 +285,8 @@ calculate_data_size <- function(data) {
     }
 
     return(as.numeric(post_size))
+}
+
+formatSize <- function(size) {
+    format(size, scientific = FALSE)
 }

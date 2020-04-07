@@ -5,6 +5,9 @@
 \alias{get_bucketname.character}
 \alias{get_bucketname.s3_bucket}
 \alias{get_bucketname.s3_object}
+\alias{get_objectkey}
+\alias{get_objectkey.character}
+\alias{get_objectkey.s3_object}
 \title{Utility Functions}
 \usage{
 get_bucketname(x, ...)
@@ -14,14 +17,22 @@ get_bucketname(x, ...)
 \method{get_bucketname}{s3_bucket}(x, ...)
 
 \method{get_bucketname}{s3_object}(x, ...)
+
+get_objectkey(x, ...)
+
+\method{get_objectkey}{character}(x, ...)
+
+\method{get_objectkey}{s3_object}(x, ...)
 }
 \arguments{
-\item{x}{An object.}
+\item{x}{S3 object, s3:// URL or a string}
 
 \item{\dots}{Ignored.}
 }
 \value{
-\code{get_bucketname} returns a character string.
+\code{get_bucketname} returns a character string with the name of the bucket.
+
+\code{get_objectkey} returns a character string with S3 key which is the part excluding bucket name and leading slashes
 }
 \description{
 Some utility functions for working with S3 objects and buckets
